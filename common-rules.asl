@@ -18,7 +18,7 @@ find_available_storage(StorageId, Load) :-
 
 find_storage(StorageId, Items) :-
 	storage(StorageId, Lat, Long, Price, TotCap, UsedCap, Items) 
-	//& not .empty(Items)
+	& not .empty(Items)
 .
 	
 find_agent_with_capacity(Capacity, AgentId) :-

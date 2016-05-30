@@ -172,15 +172,6 @@
 	}
 .
 
-//+!assemble_job_items(JobItems)
-//<-
-//  	for (.member(item(ItemId,Amount), JobItems)) {
-//    	if (not item(ItemId, Amount)) {
-//      		!assemble_item(ItemId, Amount);					
-//     	}			
-//  	}  
-//.
-
 +!retrieve_stored_items
 <-  
 	.my_name(Me);
@@ -194,24 +185,42 @@
 					.print(StorageId, " has ", AmStored, " of ", ItemId);
 				}
 			}
-			!goto(WorkshopId);
+			!goto(WorkshopId, 0);
 			//!retrieve_items_in_storage(Storage);
 		} else {
 			.send(XName,achieve,goto(WorkshopId, 0));
-			!wait_skip(item_needed_received);
+			//!wait_skip(item_needed_received);
 		}
 	}
 .
 
-//+!assemble_item(ItemId, Amount, Materials) <-
-//	for (.member(consumed(Id, ConsAmount), Materials)) {
-//		.print(ConsAmount * Amount, " units of ", Id, " are consumed in assembly.");
-//		if (item(Id, ConsAmount * Amount)){
-//			
-//		};
-//    }
-//	for (.member(tools(Id, ReqAmount), Materials)) {
-//		.print(ReqAmount, " units of ", Id, " are required for assembly.");
-//		!move_material_to_workshop(Id, ReqAmount);
-//    }	
-//.
++!assemble_job_items(JobItems)
+<-
+  	for (.member(item(ItemId,Amount), JobItems)) {
+  		?product(ItemId, Volume, Materials);
+    	if (not item(ItemId, Amount) & not .empty(Materials)) {
+      		!assemble_item(ItemId, Amount, Materials);					
+     	}			
+  	}  
+.
+
++!assemble_item(ItemId, Amount, Materials) <-
+	for (.member(consumed(ConsId, ConsAmount), Materials)) {
+		.print(ConsAmount * Amount, " units of ", ConsId, " are consumed in assembly.");
+		?product(ConsId, ConsVolume, ConsMats);
+		if (not item(ConsId, ConsAmount * Amount) & not .empty(ConsMats)) {
+			!assemble_item(ConsId, ConsAmount * Amount, ConsMats)
+		}
+    }
+	for (.member(tools(ToolsId, ReqAmount), Materials)) {
+		.print(ReqAmount, " units of ", ToolsId, " are required for assembly.");
+		?product(ToolsId, ToolsVolume, ToolsMats);
+		if (not item(ToolsId, ReqAmount * Amount) & not .empty(ToolsMats)) {
+			!assemble_item(ToolsId, ReqAmount * Amount, ToolsMats)
+		}
+    }
+    
+    for(.range(I,1,Amount)) {
+    	!assemble(ItemId);	
+    }	
+.

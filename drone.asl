@@ -8,7 +8,7 @@
     .print(JobId,Storage,Begin,End,Reward,Items);
     !provide_job_items(Items);
     !retrieve_stored_items;
-    //!assemble_job_items(Items);
+    !assemble_job_items(Items);
     //!deliver_job_items(Items,Storage);
 //    !buy_item(tool1,1);
 //    !buy_item(base1,5);
