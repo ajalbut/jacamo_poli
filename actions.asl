@@ -1,6 +1,7 @@
 // Goto (option 1)
 // FacilityId must be a string
-+!goto(FacilityId, _) : inFacility(FacilityId).
++!goto(FacilityId, _) : inFacility(FacilityId) <-
+	.print ("Arrived at ", FacilityId).
 
 +!goto(FacilityId, 0)
 <-

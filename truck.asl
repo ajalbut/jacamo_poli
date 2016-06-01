@@ -1,16 +1,9 @@
 // specific plans for trucks
+// Escravo, espera ordens do drone.
 
 !run.
 
 +!run
 <-  
-//	!buy_item(base3,1);
-//    !goto(workshop1,0);
-//
-//    .print("at workshop waiting to assemble...");    
-//    !wait_skip( assemble_step(AS) );
-//    !wait_skip( step(AS) );
-//	!assist_assemble(a1);    
-
 	!skip_forever;    
 .
